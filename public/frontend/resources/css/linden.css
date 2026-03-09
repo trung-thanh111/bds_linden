@@ -1885,6 +1885,13 @@ html {
     color: var(--ln-accent);
 }
 
+.linden-footer__links span {
+    display: block;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+}
+
 .linden-footer__contact-item {
     display: flex;
     align-items: flex-start;

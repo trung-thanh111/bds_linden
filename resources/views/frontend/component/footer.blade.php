@@ -28,7 +28,8 @@
             </div>
 
             <div>
-                <div class="linden-footer__title">Khám Phá</div>
+                <div class="linden-footer__title">{{ $menu['footer-menu'][2]['item']->languages->first()->pivot->name }}
+                </div>
                 @if (isset($menu['footer-menu'][2]))
                     @php
                         $addressMenu = $menu['footer-menu'][2];
@@ -47,14 +48,15 @@
             </div>
 
             <div>
-                <div class="linden-footer__title">Địa Chỉ</div>
+                <div class="linden-footer__title">{{ $menu['footer-menu'][0]['item']->languages->first()->pivot->name }}
+                </div>
                 @if (isset($menu['footer-menu'][0]))
                     @php
                         $addressMenu = $menu['footer-menu'][0];
                     @endphp
-                    <div style="color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.8;">
+                    <div class="linden-footer__links">
                         @foreach ($addressMenu['children'] as $child)
-                            {!! $child['item']->languages->first()->pivot->name !!}{!! !$loop->last ? '<br>' : '' !!}
+                            <span>{!! $child['item']->languages->first()->pivot->name !!}</span>
                         @endforeach
                     </div>
                 @else
@@ -67,14 +69,16 @@
 
             {{-- Column 4: Contact --}}
             <div>
-                <div class="linden-footer__title">Liên Hệ</div>
+                <div class="linden-footer__title">
+                    {{ $menu['footer-menu'][1]['item']->languages->first()->pivot->name }}
+                </div>
                 @if (isset($menu['footer-menu'][1]))
                     @php
                         $contactMenu = $menu['footer-menu'][1];
                     @endphp
-                    <div style="color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.8;">
+                    <div class="linden-footer__links">
                         @foreach ($contactMenu['children'] as $child)
-                            {!! $child['item']->languages->first()->pivot->name !!}{!! !$loop->last ? '<br>' : '' !!}
+                            <span>{!! $child['item']->languages->first()->pivot->name !!}</span>
                         @endforeach
                     </div>
                 @else
