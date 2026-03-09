@@ -7,21 +7,26 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RealEstate\VisitRequest\StoreRequest;
 use App\Http\Requests\RealEstate\VisitRequest\UpdateRequest;
 use App\Services\V2\Impl\RealEstate\VisitRequestService;
+use App\Services\V2\Impl\RealEstate\PropertyService;
+use App\Services\V2\Impl\RealEstate\AgentService;
 use App\Models\Language;
-use App\Models\Property;
-use App\Models\Agent;
 
 class VisitRequestController extends Controller
 {
 
     private $service;
-
+    protected $propertyService;
+    protected $agentService;
     protected $language;
 
     public function __construct(
-        VisitRequestService $service
+        VisitRequestService $service,
+        PropertyService $propertyService,
+        AgentService $agentService
     ) {
         $this->service = $service;
+        $this->propertyService = $propertyService;
+        $this->agentService = $agentService;
         $this->middleware(function ($request, $next) {
             $locale = app()->getLocale();
             $language = Language::where('canonical', $locale)->first();
@@ -54,8 +59,8 @@ class VisitRequestController extends Controller
             'method' => 'create',
             'extendJs' => true
         ];
-        $properties = Property::all();
-        $agents = Agent::all();
+        $properties = $this->propertyService->all();
+        $agents = $this->agentService->all();
         $template = 'backend.visit_request.store';
         return view('backend.dashboard.layout', compact(
             'template',
@@ -76,8 +81,8 @@ class VisitRequestController extends Controller
             'method' => 'update',
             'extendJs' => true
         ];
-        $properties = Property::all();
-        $agents = Agent::all();
+        $properties = $this->propertyService->all();
+        $agents = $this->agentService->all();
         $template = 'backend.visit_request.store';
         return view('backend.dashboard.layout', compact(
             'template',

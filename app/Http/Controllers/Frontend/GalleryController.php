@@ -3,15 +3,25 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\FrontendController;
-use App\Models\Floorplan;
-use App\Models\Gallery;
-use App\Models\Property;
+use App\Services\V2\Impl\RealEstate\GalleryService;
+use App\Services\V2\Impl\RealEstate\FloorplanService;
+use App\Services\V2\Impl\RealEstate\PropertyService;
 use Illuminate\Http\Request;
 
 class GalleryController extends FrontendController
 {
-    public function __construct()
-    {
+    protected $galleryService;
+    protected $floorplanService;
+    protected $propertyService;
+
+    public function __construct(
+        GalleryService $galleryService,
+        FloorplanService $floorplanService,
+        PropertyService $propertyService
+    ) {
+        $this->galleryService = $galleryService;
+        $this->floorplanService = $floorplanService;
+        $this->propertyService = $propertyService;
         parent::__construct();
     }
 
@@ -20,14 +30,18 @@ class GalleryController extends FrontendController
      */
     public function index()
     {
-        $galleries = Gallery::where('publish', 2)
-            ->orderBy('id', 'desc')
-            ->get();
-        $floorplans = Floorplan::with('rooms')
-            ->where('publish', 2)
-            ->orderBy('floor_number')
-            ->get();
-        $property = Property::where('publish', 2)->first();
+        $galleries = $this->galleryService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['id', 'desc']
+        );
+        $floorplans = $this->floorplanService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            relation: ['rooms'],
+            orderBy: ['floor_number', 'asc']
+        );
+        $property = $this->propertyService->findByCondition([['publish', '=', 2]]);
 
         $system = $this->system;
         $seo = $this->buildSeo('Thư Viện Ảnh — Homely Vietnam');

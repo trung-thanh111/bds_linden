@@ -3,25 +3,45 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\FrontendController;
-use App\Models\Property;
-use App\Models\PropertyFacility;
-use App\Models\Floorplan;
-use App\Models\Gallery;
-use App\Models\LocationHighlight;
-use App\Models\Agent;
-use App\Models\Slide;
-use App\Models\VisitRequest;
+use App\Services\V2\Impl\RealEstate\PropertyService;
+use App\Services\V2\Impl\RealEstate\PropertyFacilityService;
+use App\Services\V2\Impl\RealEstate\FloorplanService;
+use App\Services\V2\Impl\RealEstate\GalleryService;
+use App\Services\V2\Impl\RealEstate\LocationHighlightService;
+use App\Services\V2\Impl\RealEstate\AgentService;
+use App\Services\V1\Core\SlideService;
 use App\Repositories\Core\SystemRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends FrontendController
 {
     protected $systemRepository;
+    protected $propertyService;
+    protected $facilityService;
+    protected $floorplanService;
+    protected $galleryService;
+    protected $locationHighlightService;
+    protected $agentService;
+    protected $slideService;
 
     public function __construct(
         SystemRepository $systemRepository,
+        PropertyService $propertyService,
+        PropertyFacilityService $facilityService,
+        FloorplanService $floorplanService,
+        GalleryService $galleryService,
+        LocationHighlightService $locationHighlightService,
+        AgentService $agentService,
+        SlideService $slideService
     ) {
         $this->systemRepository = $systemRepository;
+        $this->propertyService = $propertyService;
+        $this->facilityService = $facilityService;
+        $this->floorplanService = $floorplanService;
+        $this->galleryService = $galleryService;
+        $this->locationHighlightService = $locationHighlightService;
+        $this->agentService = $agentService;
+        $this->slideService = $slideService;
         parent::__construct();
     }
 
@@ -30,27 +50,44 @@ class HomeController extends FrontendController
      */
     public function index()
     {
-        $property = Property::where('publish', 2)->first();
-        $facilities = PropertyFacility::where('publish', 2)
-            ->orderBy('sort_order')
-            ->get();
-        $floorplans = Floorplan::with('rooms')
-            ->where('publish', 2)
-            ->orderBy('floor_number')
-            ->get();
-        $galleries = Gallery::where('publish', 2)
-            ->orderBy('id', 'desc')
-            ->get();
-        $locationHighlights = LocationHighlight::where('publish', 2)
-            ->orderBy('sort_order')
-            ->get();
-        $primaryAgent = Agent::where('is_primary', true)
-            ->where('publish', 2)
-            ->first();
-        $agents = Agent::where('publish', 2)->get();
-        $slides = Slide::where('keyword', 'main-slider')
-            ->where('publish', 2)
-            ->first();
+        $property = $this->propertyService->findByCondition([['publish', '=', 2]]);
+
+        $facilities = $this->facilityService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['sort_order', 'asc']
+        );
+
+        $floorplans = $this->floorplanService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            relation: ['rooms'],
+            orderBy: ['floor_number', 'asc']
+        );
+
+        $galleries = $this->galleryService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['id', 'desc']
+        );
+
+        $locationHighlights = $this->locationHighlightService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['sort_order', 'asc']
+        );
+
+        $primaryAgent = $this->agentService->findByCondition(
+            condition: [['is_primary', '=', true], ['publish', '=', 2]]
+        );
+
+        $agents = $this->agentService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true
+        );
+
+        $slides = $this->slideService->getSlide(['main-slider']);
+        $slides = $slides['main-slider'] ?? null;
 
         $system = $this->system;
         $seo = $this->buildSeo();

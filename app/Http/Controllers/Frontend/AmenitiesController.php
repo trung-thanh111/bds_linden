@@ -3,27 +3,41 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\FrontendController;
-use App\Models\Property;
-use App\Models\PropertyFacility;
-use App\Models\Gallery;
+use App\Services\V2\Impl\RealEstate\PropertyService;
+use App\Services\V2\Impl\RealEstate\PropertyFacilityService;
+use App\Services\V2\Impl\RealEstate\GalleryService;
 use Illuminate\Http\Request;
 
 class AmenitiesController extends FrontendController
 {
-    public function __construct()
-    {
+    protected $propertyService;
+    protected $facilityService;
+    protected $galleryService;
+
+    public function __construct(
+        PropertyService $propertyService,
+        PropertyFacilityService $facilityService,
+        GalleryService $galleryService
+    ) {
+        $this->propertyService = $propertyService;
+        $this->facilityService = $facilityService;
+        $this->galleryService = $galleryService;
         parent::__construct();
     }
 
     public function index()
     {
-        $property = Property::where('publish', 2)->first();
-        $facilities = PropertyFacility::where('publish', 2)
-            ->orderBy('id', 'desc')
-            ->get();
-        $galleries = Gallery::where('publish', 2)
-            ->orderBy('id', 'desc')
-            ->get();
+        $property = $this->propertyService->findByCondition([['publish', '=', 2]]);
+        $facilities = $this->facilityService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['id', 'desc']
+        );
+        $galleries = $this->galleryService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['id', 'desc']
+        );
 
         $system = $this->system;
         $seo = $this->buildSeo('Tiện Nghi — ' . ($property->name ?? 'Linden Vietnam'));

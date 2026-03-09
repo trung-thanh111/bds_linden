@@ -3,23 +3,32 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\FrontendController;
-use App\Models\Property;
-use App\Models\LocationHighlight;
+use App\Services\V2\Impl\RealEstate\PropertyService;
+use App\Services\V2\Impl\RealEstate\LocationHighlightService;
 use Illuminate\Http\Request;
 
 class NeighbourhoodController extends FrontendController
 {
-    public function __construct()
-    {
+    protected $propertyService;
+    protected $locationHighlightService;
+
+    public function __construct(
+        PropertyService $propertyService,
+        LocationHighlightService $locationHighlightService
+    ) {
+        $this->propertyService = $propertyService;
+        $this->locationHighlightService = $locationHighlightService;
         parent::__construct();
     }
 
     public function index()
     {
-        $property = Property::where('publish', 2)->first();
-        $locationHighlights = LocationHighlight::where('publish', 2)
-            ->orderBy('id', 'desc')
-            ->get();
+        $property = $this->propertyService->findByCondition([['publish', '=', 2]]);
+        $locationHighlights = $this->locationHighlightService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            orderBy: ['id', 'desc']
+        );
 
         $system = $this->system;
         $seo = $this->buildSeo('Xung Quanh — ' . ($property->name ?? 'Linden Vietnam'));

@@ -85,10 +85,6 @@ return [
             'name' => ['language', 'generate', 'system', 'widget'],
             'subModule' => [
                 [
-                    'title' => 'QL Ngôn ngữ',
-                    'route' => 'language/index'
-                ],
-                [
                     'title' => 'Cấu hình hệ thống',
                     'route' => 'system/index'
                 ],

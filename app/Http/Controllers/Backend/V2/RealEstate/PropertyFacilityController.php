@@ -7,20 +7,22 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RealEstate\PropertyFacility\StoreRequest;
 use App\Http\Requests\RealEstate\PropertyFacility\UpdateRequest;
 use App\Services\V2\Impl\RealEstate\PropertyFacilityService;
+use App\Services\V2\Impl\RealEstate\PropertyService;
 use App\Models\Language;
-use App\Models\Property;
 
 class PropertyFacilityController extends Controller
 {
 
     private $service;
-
+    protected $propertyService;
     protected $language;
 
     public function __construct(
-        PropertyFacilityService $service
+        PropertyFacilityService $service,
+        PropertyService $propertyService
     ) {
         $this->service = $service;
+        $this->propertyService = $propertyService;
         $this->middleware(function ($request, $next) {
             $locale = app()->getLocale();
             $language = Language::where('canonical', $locale)->first();
@@ -53,7 +55,7 @@ class PropertyFacilityController extends Controller
             'method' => 'create',
             'extendJs' => true
         ];
-        $properties = Property::all();
+        $properties = $this->propertyService->all();
         $template = 'backend.property_facility.store';
         return view('backend.dashboard.layout', compact(
             'template',
@@ -73,7 +75,7 @@ class PropertyFacilityController extends Controller
             'method' => 'update',
             'extendJs' => true
         ];
-        $properties = Property::all();
+        $properties = $this->propertyService->all();
         $template = 'backend.property_facility.store';
         return view('backend.dashboard.layout', compact(
             'template',
