@@ -1,7 +1,6 @@
 <footer class="linden-footer">
     <div class="uk-container uk-container-center">
         <div class="linden-footer__grid">
-            {{-- Column 1: Logo + Description --}}
             <div>
                 <div class="linden-footer__logo">
                     <a href="/">
@@ -28,20 +27,25 @@
                 </div>
             </div>
 
-            {{-- Column 2: Quick Links --}}
             <div>
                 <div class="linden-footer__title">Khám Phá</div>
-                <div class="linden-footer__links">
-                    <a href="/">Trang Chủ</a>
-                    <a href="{{ url('/gioi-thieu.html') }}">Tòa Nhà</a>
-                    <a href="{{ url('/thu-vien-anh.html') }}">Thư Viện Ảnh</a>
-                    <a href="{{ url('/tien-nghi.html') }}">Tiện Nghi</a>
-                    <a href="{{ url('/xung-quanh.html') }}">Xung Quanh</a>
-                    <a href="{{ url('/lien-he.html') }}">Liên Hệ</a>
-                </div>
+                @if (isset($menu['footer-menu'][2]))
+                    @php
+                        $addressMenu = $menu['footer-menu'][2];
+                    @endphp
+                    <div class="linden-footer__links">
+                        @foreach ($addressMenu['children'] as $child)
+                            <a href="{{ $child['item']->url }}">{!! $child['item']->languages->first()->pivot->name !!}</a>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="linden-footer__contact-item">
+                        <i class="fa fa-map-marker"></i>
+                        <span>{{ $system['contact_address'] ?? '742 Evergreen Terrace, Quận 7, TP. HCM' }}</span>
+                    </div>
+                @endif
             </div>
 
-            {{-- Column 3: Address --}}
             <div>
                 <div class="linden-footer__title">Địa Chỉ</div>
                 @if (isset($menu['footer-menu'][0]))

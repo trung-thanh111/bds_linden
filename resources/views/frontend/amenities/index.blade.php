@@ -119,8 +119,16 @@
                     @foreach ($displayFeatures as $feature)
                         <div class="ln-features__item" data-reveal="up">
                             <div class="ln-features__icon" style="margin-bottom: 20px;">
-                                <i class="fa fa-3x {{ isset($feature->icon) && $feature->icon ? $feature->icon : 'fa-star' }}"
-                                    style="color:var(--ln-accent);"></i>
+                                @php
+                                    $iconClass =
+                                        isset($feature->icon) && !empty($feature->icon)
+                                            ? $feature->icon
+                                            : 'fa-check-circle-o';
+                                    if (strpos($iconClass, 'fa ') === false && strpos($iconClass, 'fa-') === 0) {
+                                        $iconClass = 'fa ' . $iconClass;
+                                    }
+                                @endphp
+                                <i class="{{ $iconClass }}" style="color:var(--ln-accent); font-size: 42px;"></i>
                             </div>
                             <div class="ln-features__name">{{ $feature->name }}</div>
                             <div class="ln-features__desc">{{ $feature->description ?? ($feature->desc ?? '') }}</div>

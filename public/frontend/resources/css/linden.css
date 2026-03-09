@@ -887,7 +887,7 @@ html {
 
 .ln-details__top-item .item-value i {
     font-size: 32px;
-    color: var(--ln-gray);
+    color: var(--ln-accent);
     font-weight: 300;
 }
 
@@ -895,7 +895,7 @@ html {
     font-family: var(--ln-font-heading);
     font-size: 20px;
     font-weight: 500;
-    color: var(--ln-dark);
+    color: var(--ln-accent);
 }
 
 .ln-details__bottom {
@@ -928,7 +928,7 @@ html {
 .ln-details__bottom-item .item-value {
     font-size: 16px;
     font-weight: 500;
-    color: var(--ln-dark);
+    color: var(--ln-accent);
     text-align: right;
 }
 
@@ -1079,6 +1079,7 @@ html {
 
 .ln-spec-card .spec-text span {
     font-weight: 500;
+    color: var(--ln-accent);
 }
 
 .ln-schedule {
@@ -1304,7 +1305,7 @@ html {
 }
 
 .ln-features__icon i {
-    font-size: 32px;
+    font-size: 42px;
     color: var(--ln-accent);
 }
 
