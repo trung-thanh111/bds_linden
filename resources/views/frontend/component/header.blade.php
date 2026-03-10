@@ -3,7 +3,7 @@
     data-uk-sticky="{top:-100, animation: 'uk-animation-slide-top'}">
     <div class="uk-container uk-container-center">
         <div class="uk-grid uk-grid-collapse uk-flex uk-flex-middle">
-            <div class="uk-width-large-1-5">
+            <div class="uk-width-large-1-10">
                 <div class="logo">
                     <a href="/" title="logo">
                         <img src="{{ $system['homepage_logo'] ?? asset('frontend/resources/img/homely/logo.webp') }}"
@@ -11,19 +11,20 @@
                     </a>
                 </div>
             </div>
-            <div class="uk-width-large-3-5">
+            <div class="uk-width-large-4-5">
                 <nav class="linden-nav">
                     <ul class="uk-navbar-nav uk-flex uk-flex-center">
                         {!! $menu['main-menu'] ?? '' !!}
                     </ul>
                 </nav>
             </div>
-            <div class="uk-width-large-1-5 uk-text-right">
+            <div class="uk-width-large-1-10 uk-text-right">
                 <a href="/lien-he.html" class="ln-header-cta">
                     Liên Hệ
                 </a>
             </div>
         </div>
+
     </div>
 </header>
 

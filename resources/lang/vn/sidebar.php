@@ -36,6 +36,21 @@ return [
             ]
         ],
         [
+            'title' => 'Bài viết',
+            'icon' => 'fa fa-file',
+            'name' => ['post'],
+            'subModule' => [
+                [
+                    'title' => 'Bài viết',
+                    'route' => 'post/index'
+                ],
+                [
+                    'title' => 'Nhóm bài viết',
+                    'route' => 'post/catalogue/index'
+                ],
+            ]
+        ],
+        [
             'title' => 'Thư viện ảnh',
             'icon' => 'fa fa-picture-o',
             'name' => ['gallery'],

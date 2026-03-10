@@ -9,10 +9,7 @@ use App\Services\V1\Post\PostCatalogueService;
 use App\Services\V1\Post\PostService;
 use App\Repositories\Post\PostRepository;
 use App\Services\V1\Core\WidgetService;
-
-use Jenssegers\Agent\Facades\Agent;
 use App\Models\Post;
-use App\View\Components\TableOfContents;
 
 class postController extends FrontendController
 {
@@ -42,25 +39,44 @@ class postController extends FrontendController
 
     public function index(Request $request, $page = 1)
     {
-        $posts = $this->postService->paginate($request, $this->language, null, $page, ['path' => 'tin-tuc.html']);
+        $posts = $this->postService->paginate($request, $this->language, null, $page, ['path' => 'bai-viet.html']);
 
         $config = $this->config();
         $system = $this->system;
         $seo = [
-            'meta_title' => 'Tin tức',
+            'meta_title' => 'Bài viết',
             'meta_description' => '',
-            'canonical' => url('tin-tuc.html'),
+            'canonical' => url('bai-viet.html'),
             'meta_image' => ''
         ];
 
         $lastestNews = Post::with(['languages'])->orderBy('order', 'desc')->orderBy('id', 'desc')->where(['publish' => 2])->limit(8)->get();
+
+        $categories = $this->postCatalogueRepository->findByCondition(
+            [
+                ['publish', '=', 2],
+                ['parent_id', '=', 0]
+            ],
+            true,
+            ['languages'],
+            ['order', 'desc']
+        )->take(4);
+
+        $property = $this->postCatalogueRepository->getPostCatalogueById(0, $this->language);
+
+        $breadcrumb = [];
+        $postCatalogue = null;
 
         return view('frontend.post.catalogue.index', compact(
             'config',
             'seo',
             'system',
             'posts',
-            'lastestNews'
+            'lastestNews',
+            'categories',
+            'breadcrumb',
+            'postCatalogue',
+            'property'
         ));
     }
 

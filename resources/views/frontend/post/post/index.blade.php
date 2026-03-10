@@ -1,129 +1,128 @@
 @extends('frontend.homepage.layout')
+@section('header-class', 'header-inner')
 
 @section('content')
 
-@php
-$postLang = $post->languages->first()?->pivot;
-$postTitle = $postLang?->name ?? ($post->name ?? '');
-$postDesc = $postLang?->description ?? '';
-$postImage = $post->image ?? null;
-$postDate = $post->released_at
-? \Carbon\Carbon::parse($post->released_at)
-: \Carbon\Carbon::parse($post->created_at);
-$catLang = $postCatalogue->languages->first()?->pivot ?? null;
-$catName = $catLang?->name ?? ($postCatalogue->name ?? 'Tin tức');
-$catUrl = $catLang?->canonical ?? ($postCatalogue->canonical ?? '#');
-@endphp
+    @php
+        $postLang = $post->languages->first()?->pivot;
+        $postTitle = $postLang?->name ?? ($post->name ?? '');
+        $postDesc = $postLang?->description ?? '';
+        $postImage = $post->image ?? asset('images/placeholder-news.jpg');
 
-<section class="uk-section uk-flex uk-flex-middle uk-light hero-scroll-effect"
-    style="background: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.2)),
-           url('{{ asset('frontend/resources/img/homely/slider/1.webp') }}') no-repeat center center;
-           background-size: 110%; min-height: 400px; padding-top: 100px;">
-    <div class="uk-container uk-container-center uk-width-1-1">
-        <div class="uk-flex uk-flex-middle uk-flex-space-between uk-flex-wrap"
-            uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 100">
-            <h1 class="uk-margin-remove title-breadcrumb">{{ $postTitle }}</h1>
-            <ul class="uk-breadcrumb uk-margin-remove custom-breadcrumb">
-                <li><a href="{{ route('home.index') }}">Trang Chủ</a></li>
-                <li><a href="{{ write_url($catUrl) }}">{{ $catName }}</a></li>
-                <li><span>{{ \Str::limit($postTitle, 50) }}</span></li>
-            </ul>
-        </div>
-    </div>
-</section>
+        $postDate = $post->released_at
+            ? \Carbon\Carbon::parse($post->released_at)
+            : \Carbon\Carbon::parse($post->created_at);
+        $dateFormatted = $postDate->format('F d, Y');
 
-<section class="psd-body-section">
-    <div class="uk-container uk-container-center">
-        <div class="psd-layout">
-            <div class="psd-main">
-                <div class="psd-meta">
-                    <span class="psd-meta__badge">
-                        {{ $postDate->format('d') }} {{ $postDate->translatedFormat('M Y') }}
-                    </span>
-                    <a href="{{ write_url($catUrl) }}" class="psd-meta__cat">{{ $catName }}</a>
+        $catLang = $postCatalogue->languages->first()?->pivot ?? null;
+        $catName = $catLang?->name ?? ($postCatalogue->name ?? 'Bài viết');
+        $catUrl = $catLang?->canonical ?? ($postCatalogue->canonical ?? '#');
+    @endphp
+
+    <div id="scroll-progress"></div>
+    <div class="linden-page">
+
+        <section class="ln-page-header"
+            style="background-image: url('{{ $property->image ?? asset('frontend/resources/img/homely/slider/1.webp') }}');">
+            <div class="ln-page-header__content">
+                <div class="uk-container uk-container-center">
+                    <div class="ln-page-header__breadcrumb">
+                        <a href="{{ route('home.index') }}">Trang Chủ</a>
+                        <span class="separator">/</span>
+                        <a href="{{ write_url($catUrl) }}">{{ $catName }}</a>
+                        <span class="separator">/</span>
+                        <span class="current-page">{{ \Str::limit($postTitle, 40) }}</span>
+                    </div>
+                    <h1 class="ln-page-header__title">Chi tiết bài viết</h1>
+                    <div class="ln-page-header__desc">{{ $postTitle }}</div>
                 </div>
-                @if ($postImage)
-                <figure class="psd-thumb-wrap">
-                    <img src="{{ asset($postImage) }}" alt="{{ $postTitle }}" class="psd-thumb"
-                        loading="eager" />
-                </figure>
-                @endif
-                @if ($postDesc)
-                <div class="psd-excerpt">{!! $postDesc !!}</div>
-                @endif
-                <div class="psd-content">
+            </div>
+        </section>
+
+        <section class="ln-post-overview">
+            <div class="uk-container uk-container-center">
+                <div class="uk-grid uk-grid-collapse uk-flex-middle">
+                    <div class="uk-width-large-1-2 uk-width-medium-1-1">
+                        <div class="ln-overview-image">
+                            <img src="{{ asset($postImage) }}" alt="{{ $postTitle }}">
+                        </div>
+                    </div>
+                    <div class="uk-width-large-1-2 uk-width-medium-1-1">
+                        <div class="ln-overview-content">
+                            <div class="ln-overview-meta">
+                                <span class="ln-meta-date">{{ strtoupper($dateFormatted) }}</span>
+                                <span class="ln-meta-sep">•</span>
+                                <span class="ln-meta-cat">{{ strtoupper($catName) }}</span>
+                            </div>
+                            <h3 class="ln-overview-title">{{ $postTitle }}</h3>
+                            @if ($postDesc)
+                                <div class="ln-overview-desc">
+                                    {!! strip_tags($postDesc) !!}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ln-post-content-section" style="background:var(--ln-white); padding: 80px 0;">
+            <div class="uk-container uk-container-center">
+                <div class="ln-post-content-inner">
                     {!! $contentWithToc ?? $postLang?->content !!}
                 </div>
-                <div class="psd-share">
-                    <span class="psd-share__label">Chia sẻ:</span>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}"
-                        target="_blank" rel="noopener" class="psd-share__btn psd-share__btn--fb" title="Facebook">
-                        <span uk-icon="icon: facebook"></span>
-                    </a>
-                </div>
-
             </div>
-            <aside class="psd-sidebar">
+        </section>
 
-                @if (isset($postCatalogue->posts) && $postCatalogue->posts->isNotEmpty())
-                <div class="psd-widget">
-                    <h4 class="psd-widget__title">Bài viết liên quan</h4>
+        @if (isset($postCatalogue->posts) &&
+                $postCatalogue->posts->isNotEmpty() &&
+                $postCatalogue->posts->where('id', '!=', $post->id)->count() > 0)
+            <section class="ln-post-related-section" style="background:var(--ln-white); padding-bottom: 70px;">
+                <div class="uk-container uk-container-center">
+                    <div class="uk-text-center uk-container-center uk-width-large-2-3 uk-width-medium-4-5">
+                        <h3 class="ln-section-title  uk-text-center">Bài viết liên quan</h3>
+                        <span class="ln-section-desc is-visible uk-text-center">Khám phá bộ sưu tập hình ảnh nội thất và
+                            ngoại
+                            thất tuyệt đẹp của {{ $property->title ?? 'dự án' }}.</span>
+                    </div>
+                    <div class="ln-blog-grid uk-margin-large-top">
+                        @foreach ($postCatalogue->posts->where('id', '!=', $post->id)->take(3) as $index => $related)
+                            @php
+                                $rLang = $related->languages->first()?->pivot;
+                                $rTitle = $rLang?->name ?? '';
+                                $rDesc = strip_tags($rLang?->description ?? '');
+                                $rUrl = write_url($rLang?->canonical ?? '#');
+                                $rImg = !empty($related->image)
+                                    ? asset($related->image)
+                                    : asset('images/placeholder-news.jpg');
+                                $rDate = $related->released_at
+                                    ? \Carbon\Carbon::parse($related->released_at)
+                                    : \Carbon\Carbon::parse($related->created_at);
+                                $rDateFormatted = $rDate->format('F d, Y');
+                            @endphp
 
-                    <div class="sidebar-related-list">
-                        @foreach ($postCatalogue->posts->where('id', '!=', $post->id)->take(4) as $related)
-                        @php
-                        $rLang = $related->languages->first()?->pivot;
-                        $rTitle = $rLang?->name ?? '';
-                        $rUrl = write_url($rLang?->canonical ?? '#');
-                        $rImg = $related->image ?? null;
-                        $rDate = $related->released_at
-                        ? \Carbon\Carbon::parse($related->released_at)
-                        : \Carbon\Carbon::parse($related->created_at);
-                        @endphp
-
-                        <a href="{{ $rUrl }}" class="src-card" title="{{ $rTitle }}">
-                            <div class="src-card__img">
-                                <img src="{{ $rImg ? asset($rImg) : asset('frontend/images/no-image.jpg') }}"
-                                    alt="{{ $rTitle }}" loading="lazy">
-                            </div>
-                            <div class="src-card__overlay"></div>
-                            <div class="src-card__date">
-                                <span class="src-date-day">{{ $rDate->format('d') }}</span>
-                                <span class="src-date-month">{{ $rDate->translatedFormat('M') }}</span>
-                            </div>
-                            <div class="src-card__content">
-                                <h5 class="src-card__title">{{ \Str::limit($rTitle, 80) }}</h5>
-                            </div>
-
-                        </a>
+                            <article class="ln-blog-card"
+                                uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: {{ $index * 50 }}">
+                                <a href="{{ $rUrl }}" class="ln-blog-card__link">
+                                    <div class="ln-blog-card__image-wrapper">
+                                        <img src="{{ $rImg }}" alt="{{ $rTitle }}"
+                                            class="ln-blog-card__image" loading="lazy">
+                                    </div>
+                                    <div class="ln-blog-card__content">
+                                        <div class="ln-blog-card__meta">
+                                            <span class="ln-blog-card__date">{{ strtoupper($rDateFormatted) }}</span>
+                                            <span class="ln-blog-card__sep">•</span>
+                                            <span class="ln-blog-card__category">{{ strtoupper($catName) }}</span>
+                                        </div>
+                                        <h5 class="ln-blog-card__title">{{ $rTitle }}</h5>
+                                    </div>
+                                </a>
+                            </article>
                         @endforeach
                     </div>
                 </div>
-                @endif
-                @if (isset($post->tags) && $post->tags->isNotEmpty())
-                <div class="psd-widget">
-                    <h4 class="psd-widget__title">Popular Tags</h4>
-                    <div class="psd-tags">
-                        @foreach ($post->tags as $tag)
-                        <a href="#" class="psd-tag">{{ $tag->name }}</a>
-                        @endforeach
-                    </div>
-                </div>
-                @else
-                <div class="psd-widget">
-                    <h4 class="psd-widget__title">Popular Tags</h4>
-                    <div class="psd-tags">
-                        @foreach (['Home Care', 'Daily Cleaning', 'Organization Tips', 'Decluttering', 'Minimalist Living', 'Home Maintenance', 'Routine Cleaning', 'Space Management', 'Smart Storage', 'Tidy Home', 'Healthy Living', 'Lifestyle Tips'] as $tag)
-                        <a href="#" class="psd-tag">{{ $tag }}</a>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
+            </section>
+        @endif
 
-            </aside>
-
-        </div>
     </div>
-</section>
-
 @endsection

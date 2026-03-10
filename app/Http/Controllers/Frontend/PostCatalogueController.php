@@ -84,11 +84,19 @@ class PostCatalogueController extends FrontendController
 
         $lastestNews = Post::with(['languages'])->orderBy('order', 'desc')->orderBy('id', 'desc')->where(['publish' => 2])->limit(8)->get();
 
-        if ($postCatalogue->canonical === 've-chung-toi') {
-            $template = 'frontend.post.catalogue.intro';
-        } else {
-            $template = 'frontend.post.catalogue.index';
-        }
+        $rootId = ($postCatalogue->parent_id == 0) ? $postCatalogue->id : $postCatalogue->parent_id;
+        $categories = $this->postCatalogueRepository->findByCondition(
+            [
+                ['publish', '=', 2],
+                ['parent_id', '=', $rootId]
+            ],
+            true,
+            ['languages'],
+            ['order', 'desc']
+        )->take(4);
+
+        $property = $this->postCatalogueRepository->getPostCatalogueById($postCatalogue->parent_id, $this->language);
+        $template = 'frontend.post.catalogue.index';
 
         $config = $this->config();
         $system = $this->system;
@@ -107,7 +115,9 @@ class PostCatalogueController extends FrontendController
             'schema',
             'slides',
             'introduce',
-            'lastestNews'
+            'lastestNews',
+            'categories',
+            'property'
         ));
     }
 
