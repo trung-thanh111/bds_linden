@@ -226,9 +226,12 @@
                     </li>
                     <li>
                         @if ($property->video_tour_url)
-                            <div class="ln-interior__video">
-                                <iframe src="{{ str_replace('watch?v=', 'embed/', $property->video_tour_url) }}"
-                                    allowfullscreen></iframe>
+                            <div class="ln-video"
+                                style="position: relative; width: 100%; height: 550px; display: flex; align-items: center; justify-content: center; background-image: url('{{ $property->image ?? asset('frontend/resources/img/homely/slider/1.webp') }}'); background-size: cover; background-position: center;">
+                                <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.4);"></div>
+                                <a href="{{ $property->video_tour_url }}" data-fancybox class="ln-video-play-btn">
+                                    <i class="fa fa-play" style="margin-left: 6px;"></i>
+                                </a>
                             </div>
                         @else
                             <div style="padding:80px;text-align:center;background:var(--ln-cream);color:var(--ln-gray);">
