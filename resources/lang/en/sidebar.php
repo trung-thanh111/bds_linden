@@ -1,4 +1,4 @@
-<?php   
+<?php
 return [
     'module' => [
         [
@@ -36,6 +36,21 @@ return [
             ]
         ],
         [
+            'title' => 'Gallery',
+            'icon' => 'fa fa-picture-o',
+            'name' => ['gallery', 'gallery_catalogue'],
+            'subModule' => [
+                [
+                    'title' => 'Gallery List',
+                    'route' => 'gallery/index'
+                ],
+                [
+                    'title' => 'Gallery Catalogue',
+                    'route' => 'gallery/catalogue/index'
+                ]
+            ]
+        ],
+        [
             'title' => 'General',
             'icon' => 'fa fa-file',
             'name' => ['language'],
@@ -48,4 +63,3 @@ return [
         ]
     ],
 ];
-

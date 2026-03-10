@@ -53,12 +53,16 @@ return [
         [
             'title' => 'Thư viện ảnh',
             'icon' => 'fa fa-picture-o',
-            'name' => ['gallery'],
+            'name' => ['gallery', 'gallery_catalogue'],
             'subModule' => [
                 [
                     'title' => 'Danh sách',
                     'route' => 'gallery/index'
                 ],
+                [
+                    'title' => 'Nhóm thư viện',
+                    'route' => 'gallery/catalogue/index'
+                ]
             ]
         ],
         [

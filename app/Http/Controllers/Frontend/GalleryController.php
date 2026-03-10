@@ -6,6 +6,7 @@ use App\Http\Controllers\FrontendController;
 use App\Services\V2\Impl\RealEstate\GalleryService;
 use App\Services\V2\Impl\RealEstate\FloorplanService;
 use App\Services\V2\Impl\RealEstate\PropertyService;
+use App\Services\V2\Impl\RealEstate\GalleryCatalogueService;
 use Illuminate\Http\Request;
 
 class GalleryController extends FrontendController
@@ -13,15 +14,18 @@ class GalleryController extends FrontendController
     protected $galleryService;
     protected $floorplanService;
     protected $propertyService;
+    protected $galleryCatalogueService;
 
     public function __construct(
         GalleryService $galleryService,
         FloorplanService $floorplanService,
-        PropertyService $propertyService
+        PropertyService $propertyService,
+        GalleryCatalogueService $galleryCatalogueService
     ) {
         $this->galleryService = $galleryService;
         $this->floorplanService = $floorplanService;
         $this->propertyService = $propertyService;
+        $this->galleryCatalogueService = $galleryCatalogueService;
         parent::__construct();
     }
 
@@ -30,6 +34,15 @@ class GalleryController extends FrontendController
      */
     public function index()
     {
+        $galleryCatalogues = $this->galleryCatalogueService->findByCondition(
+            condition: [['publish', '=', 2]],
+            flag: true,
+            relation: ['languages', 'galleries' => function ($query) {
+                $query->where('publish', 2);
+            }],
+            orderBy: ['order', 'desc'] // or 'id' => 'desc'
+        );
+
         $galleries = $this->galleryService->findByCondition(
             condition: [['publish', '=', 2]],
             flag: true,
@@ -53,6 +66,7 @@ class GalleryController extends FrontendController
             'seo',
             'system',
             'schema',
+            'galleryCatalogues',
             'galleries',
             'floorplans',
             'property'

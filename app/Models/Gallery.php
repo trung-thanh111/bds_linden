@@ -14,6 +14,7 @@ class Gallery extends Model
     use HasFactory, Notifiable, SoftDeletes, HasQuery;
 
     protected $fillable = [
+        'gallery_catalogue_id',
         'property_id',
         'image',
         'album',
@@ -25,7 +26,7 @@ class Gallery extends Model
         'album' => 'json'
     ];
 
-    protected $relationable = ['users', 'properties'];
+    protected $relationable = ['users', 'properties', 'gallery_catalogues'];
 
     public function getRelationable()
     {
@@ -40,5 +41,10 @@ class Gallery extends Model
     public function properties(): BelongsTo
     {
         return $this->belongsTo(Property::class, 'property_id', 'id');
+    }
+
+    public function gallery_catalogues(): BelongsTo
+    {
+        return $this->belongsTo(GalleryCatalogue::class, 'gallery_catalogue_id', 'id');
     }
 }

@@ -43,7 +43,7 @@ require __DIR__ . '/web/realestate.route.php';
 Route::group(['middleware' => ['locale']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
     Route::get('bat-dong-san.html', [AboutController::class, 'index'])->name('about.index');
-    Route::get('thu-vien-anh.html', [GalleryController::class, 'index'])->name('gallery.index');
+    Route::get('thu-vien-anh.html', [GalleryController::class, 'index'])->name('fe.gallery.index');
     Route::get('tien-nghi.html', [AmenitiesController::class, 'index'])->name('amenities.index');
     Route::get('xung-quanh.html', [NeighbourhoodController::class, 'index'])->name('neighbourhood.index');
     Route::get('lien-he.html', [ContactController::class, 'index'])->name('contact.index');
@@ -54,7 +54,6 @@ Route::group(['middleware' => ['locale']], function () {
     Route::get('tim-kiem', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search');
     Route::get('tim-kiem/trang-{page}', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search')->where('page', '[0-9]+');
 
-    // Catch-all router: resolve canonical slugs from DB via RouterController
     Route::get('{canonical}/trang-{page}', [RouterController::class, 'page'])
         ->where(['page' => '[0-9]+'])
         ->name('router.page');

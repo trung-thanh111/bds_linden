@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\V2\RealEstate\PropertyFacilityController;
 use App\Http\Controllers\Backend\V2\RealEstate\FloorplanController;
 use App\Http\Controllers\Backend\V2\RealEstate\FloorplanRoomController;
 use App\Http\Controllers\Backend\V2\RealEstate\GalleryController;
+use App\Http\Controllers\Backend\V2\RealEstate\GalleryCatalogueController;
 use App\Http\Controllers\Backend\V2\RealEstate\LocationHighlightController;
 use App\Http\Controllers\Backend\V2\RealEstate\AgentController;
 use App\Http\Controllers\Backend\V2\RealEstate\VisitRequestController;
@@ -55,6 +56,17 @@ Route::group(['middleware' => ['admin', 'locale', 'backend_default_locale'], 'as
     Route::post('gallery/{id}/update', [GalleryController::class, 'update'])->where(['id' => '[0-9]+'])->name('gallery.update');
     Route::get('gallery/{id}/delete', [GalleryController::class, 'delete'])->where(['id' => '[0-9]+'])->name('gallery.delete');
     Route::delete('gallery/{id}/destroy', [GalleryController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('gallery.destroy');
+
+    // GalleryCatalogue
+    Route::group(['prefix' => 'gallery/catalogue'], function () {
+        Route::get('index', [GalleryCatalogueController::class, 'index'])->name('gallery.catalogue.index');
+        Route::get('create', [GalleryCatalogueController::class, 'create'])->name('gallery.catalogue.create');
+        Route::post('store', [GalleryCatalogueController::class, 'store'])->name('gallery.catalogue.store');
+        Route::get('{id}/edit', [GalleryCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('gallery.catalogue.edit');
+        Route::post('{id}/update', [GalleryCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('gallery.catalogue.update');
+        Route::get('{id}/delete', [GalleryCatalogueController::class, 'delete'])->where(['id' => '[0-9]+'])->name('gallery.catalogue.delete');
+        Route::delete('{id}/destroy', [GalleryCatalogueController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('gallery.catalogue.destroy');
+    });
 
     // LocationHighlight
     Route::get('location_highlight/index', [LocationHighlightController::class, 'index'])->name('location_highlight.index');
