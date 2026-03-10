@@ -58,10 +58,10 @@
 
                 <ul id="gallery-tabs" class="uk-switcher">
                     <li>
-                        <div class="ln-gallery-page__grid" uk-lightbox="animation: slide">
+                        <div class="ln-gallery-page__grid">
                             @if ($allImages->count() > 0)
                                 @foreach ($allImages as $img)
-                                    <a href="{{ $img['url'] }}" class="ln-gallery-page__item"
+                                    <a href="{{ $img['url'] }}" class="ln-gallery-page__item" data-fancybox="gallery-all"
                                         data-caption="{{ $img['name'] }}" data-reveal="up">
                                         <img src="{{ $img['url'] }}" alt="{{ $img['name'] }}" loading="lazy">
                                         <div class="gallery-overlay"><span class="gallery-zoom"><i
@@ -71,7 +71,7 @@
                             @else
                                 @for ($i = 1; $i <= 6; $i++)
                                     <a href="{{ asset('frontend/resources/img/homely/gallery/' . $i . '.webp') }}"
-                                        class="ln-gallery-page__item" data-reveal="up">
+                                        class="ln-gallery-page__item" data-fancybox="gallery-all" data-reveal="up">
                                         <img src="{{ asset('frontend/resources/img/homely/gallery/' . $i . '.webp') }}"
                                             alt="Gallery {{ $i }}" loading="lazy">
                                         <div class="gallery-overlay"><span class="gallery-zoom"><i
@@ -82,10 +82,10 @@
                         </div>
                     </li>
                     <li>
-                        <div class="ln-gallery-page__grid" uk-lightbox="animation: slide">
+                        <div class="ln-gallery-page__grid">
                             @if ($exteriorImages->count() > 0)
                                 @foreach ($exteriorImages as $img)
-                                    <a href="{{ $img['url'] }}" class="ln-gallery-page__item"
+                                    <a href="{{ $img['url'] }}" class="ln-gallery-page__item" data-fancybox="gallery-ext"
                                         data-caption="{{ $img['name'] }}" data-reveal="up">
                                         <img src="{{ $img['url'] }}" alt="{{ $img['name'] }}" loading="lazy">
                                         <div class="gallery-overlay"><span class="gallery-zoom"><i
@@ -99,10 +99,10 @@
                         </div>
                     </li>
                     <li>
-                        <div class="ln-gallery-page__grid" uk-lightbox="animation: slide">
+                        <div class="ln-gallery-page__grid">
                             @if ($interiorImages->count() > 0)
                                 @foreach ($interiorImages as $img)
-                                    <a href="{{ $img['url'] }}" class="ln-gallery-page__item"
+                                    <a href="{{ $img['url'] }}" class="ln-gallery-page__item" data-fancybox="gallery-int"
                                         data-caption="{{ $img['name'] }}" data-reveal="up">
                                         <img src="{{ $img['url'] }}" alt="{{ $img['name'] }}" loading="lazy">
                                         <div class="gallery-overlay"><span class="gallery-zoom"><i

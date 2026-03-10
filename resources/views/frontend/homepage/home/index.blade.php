@@ -12,11 +12,11 @@
                 <div class="ln-hero__badge">{{ $property->status ?? 'ĐANG MỞ BÁN' }}</div>
                 <h1 class="ln-hero__title">{{ $property->tagline ?? 'Không Gian Sống Sang Trọng Cho Cuộc Sống Hiện Đại' }}
                 </h1>
-                <div class="ln-hero__tagline">
+                <div class="ln-hero__tagline uk-container">
                     {{ $property->description_short ?? 'Nơi mỗi chi tiết đều được chăm chút tỉ mỉ' }}</div>
                 <div class="ln-hero__buttons">
-                    <a href="{{ url('/thu-vien-anh.html') }}" class="ln-btn-outline">Khám Phá</a>
-                    <a href="{{ url('/lien-he.html') }}" class="ln-btn">Đặt Lịch Tham Quan</a>
+                    <a href="/thu-vien-anh.html" class="ln-btn-outline">Khám Phá</a>
+                    <a href="/lien-he.html" class="ln-btn">Đặt Lịch Tham Quan</a>
                 </div>
             </div>
 
@@ -50,16 +50,46 @@
             </div>
         </section>
 
+        <section class="ln-project-overview"
+            style="background-image: url('{{ $property->image ?? asset('frontend/resources/img/homely/slider/1.webp') }}');">
+            <div class="uk-grid uk-grid-collapse" data-reveal="up">
+                <div class="uk-width-medium-1-2 uk-hidden-small">
+
+                </div>
+                <div class="uk-width-medium-1-2 uk-width-small-1-1">
+                    <div class="ln-project-overview__content">
+                        <h2 class="overview-title">Tổng Quan Dự Án</h2>
+                        <ul class="overview-list">
+                            <li><span>Tên dự án:</span> {{ $property->title ?? 'Linden Residence' }}</li>
+                            <li><span>Vị trí:</span> {{ $property->address ?? '184 Trần Văn Kiểu, P. 10, Q. 6, Tp.HCM' }}
+                            </li>
+                            @if (!empty($property->investor))
+                                <li><span>Chủ đầu tư:</span> {{ $property->investor }}</li>
+                            @endif
+                            <li><span>Thời gian hoàn thành:</span> {{ $property->year_built ?? '5/2021' }}</li>
+                            <li><span>Diện tích dự án:</span> {{ $property->area_sqm ?? '4.274,1' }} m2</li>
+                            <li><span>Quy mô dự án:</span> {{ $property->floors ?? '373' }} tầng nổi,
+                                {{ $property->bedrooms ?? '19' }} phòng</li>
+                            <li><span>Giá bán:</span> {{ number_format($property->price ?? 0, 0, ',', '.') }}
+                                {{ $property->price_unit ?? 'Tỷ' }}</li>
+                            <li><span>Trạng thái:</span> {{ $property->status ?? 'Đang mở bán' }}</li>
+                            <li><span>Thời hạn sở hữu:</span> Lâu dài</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="ln-about" id="about-section">
             <div class="uk-container uk-container-center">
                 <div class="ln-about__grid">
                     <div class="ln-about__text" data-reveal="left">
-                        <div class="ln-label">Về Dự Án</div>
+                        <div class="ln-label">Giới thiệu dự án</div>
                         <h2 class="ln-section-title">{{ $property->title ?? 'Linden Residence' }}</h2>
                         <div class="ln-section-desc">{!! $property->description ??
                             'Ngôi nhà đặc biệt này mang đến không gian sống tinh tế với những không gian mở rộng rãi, nội thất sáng sủa và thiết kế hiện đại ấm áp.' !!}</div>
                         <div style="margin-top: 30px;">
-                            <a href="{{ url('/bat-dong-san.html') }}" class="ln-btn">Tìm Hiểu Thêm</a>
+                            <a href="/bat-dong-san.html" class="ln-btn">Tìm Hiểu Thêm</a>
                         </div>
                         <div class="ln-about__awards">
                             <div class="ln-about__award">
@@ -129,38 +159,34 @@
                 <div class="ln-details__bottom" data-reveal="up">
                     <div class="ln-details__bottom-item">
                         <div class="item-label">Chỗ đỗ xe</div>
-                        <div class="item-value"><i class="fa fa-car" style="color:var(--ln-accent); margin-right:8px;"></i>
+                        <div class="item-value"><i class="fa fa-car"></i>
                             {{ $property->parking_spots ?? '—' }}</div>
                     </div>
                     <div class="ln-details__bottom-item">
                         <div class="item-label">Số tầng</div>
-                        <div class="item-value"><i class="fa fa-building-o"
-                                style="color:var(--ln-accent); margin-right:8px;"></i> {{ $property->floors ?? '—' }}</div>
+                        <div class="item-value"><i class="fa fa-building-o"></i> {{ $property->floors ?? '—' }}
+                        </div>
                     </div>
                     <div class="ln-details__bottom-item">
                         <div class="item-label">Năm xây dựng</div>
-                        <div class="item-value"><i class="fa fa-calendar-o"
-                                style="color:var(--ln-accent); margin-right:8px;"></i> {{ $property->year_built ?? '—' }}
+                        <div class="item-value"><i class="fa fa-calendar-o"></i> {{ $property->year_built ?? '—' }}
                         </div>
                     </div>
                     <div class="ln-details__bottom-item">
                         <div class="item-label">Vị trí</div>
-                        <div class="item-value"><i class="fa fa-map-marker"
-                                style="color:var(--ln-accent); margin-right:8px;"></i>
+                        <div class="item-value"><i class="fa fa-map-marker"></i>
                             {{ $property->district ?? 'Quận 7' }}, {{ $property->city ?? 'TP. HCM' }}
                         </div>
                     </div>
                     <div class="ln-details__bottom-item">
                         <div class="item-label">Giá tiền</div>
-                        <div class="item-value"><i class="fa fa-tag"
-                                style="color:var(--ln-accent); margin-right:8px;"></i>
+                        <div class="item-value"><i class="fa fa-tag"></i>
                             {{ number_format($property->price ?? 0, 0, ',', '.') }}
                             {{ $property->price_unit ?? 'Tỷ' }}</div>
                     </div>
                     <div class="ln-details__bottom-item">
                         <div class="item-label">Địa chỉ</div>
-                        <div class="item-value"><i class="fa fa-location-arrow"
-                                style="color:var(--ln-accent); margin-right:8px;"></i> {{ $property->address ?? '—' }}
+                        <div class="item-value"><i class="fa fa-location-arrow"></i> {{ $property->address ?? '—' }}
                         </div>
                     </div>
                 </div>
@@ -175,11 +201,11 @@
                         <h2 class="ln-section-title" data-reveal="up">Không Gian Sống Đẳng Cấp</h2>
                     </div>
                     <div data-reveal="fade">
-                        <a href="{{ url('/thu-vien-anh.html') }}" class="ln-btn">Xem Tất Cả</a>
+                        <a href="/thu-vien-anh.html" class="ln-btn">Xem Tất Cả</a>
                     </div>
                 </div>
 
-                <div class="ln-gallery-preview__grid" data-reveal="up" uk-lightbox="animation: slide">
+                <div class="ln-gallery-preview__grid" data-reveal="up">
                     @php $allImages = collect(); @endphp
                     @if ($galleries->count() > 0)
                         @foreach ($galleries as $gallery)
@@ -193,9 +219,11 @@
 
                     @if ($allImages->count() > 0)
                         @foreach ($allImages->take(5) as $img)
-                            <a href="{{ $img['url'] }}" class="ln-gallery-preview__item"
+                            <a href="{{ $img['url'] }}" class="ln-gallery-preview__item" data-fancybox="gallery"
                                 data-caption="{{ $img['name'] }}">
                                 <img src="{{ $img['url'] }}" alt="{{ $img['name'] }}">
+                                <div class="gallery-overlay"><span class="gallery-zoom"><i
+                                            class="fa fa-expand"></i></span></div>
                                 <div class="gallery-caption">{{ $img['name'] }}</div>
                             </a>
                         @endforeach
@@ -203,9 +231,12 @@
                         @php $roomNames = ['Phòng Khách', 'Phòng Ngủ', 'Phòng Ăn', 'Nhà Bếp', 'Phòng Tắm']; @endphp
                         @for ($i = 1; $i <= 5; $i++)
                             <a href="{{ asset('frontend/resources/img/homely/gallery/' . $i . '.webp') }}"
-                                class="ln-gallery-preview__item" data-caption="{{ $roomNames[$i - 1] }}">
+                                class="ln-gallery-preview__item" data-fancybox="gallery"
+                                data-caption="{{ $roomNames[$i - 1] }}">
                                 <img src="{{ asset('frontend/resources/img/homely/gallery/' . $i . '.webp') }}"
                                     alt="{{ $roomNames[$i - 1] }}">
+                                <div class="gallery-overlay"><span class="gallery-zoom"><i
+                                            class="fa fa-expand"></i></span></div>
                                 <div class="gallery-caption">{{ $roomNames[$i - 1] }}</div>
                             </a>
                         @endfor
@@ -214,10 +245,29 @@
             </div>
         </section>
 
+        @if (!empty($property->video_tour_url))
+            <section class="ln-video"
+                style="position: relative; width: 100%; height: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; background-image: url('{{ $property->image ?? asset('frontend/resources/img/homely/slider/1.webp') }}'); background-size: cover; background-position: center; background-attachment: fixed;">
+                <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.4);"></div>
+
+                <div style="position: relative; z-index: 2; text-align: center; margin-bottom: 60px;">
+                    <div class="ln-label ln-label-center"
+                        style="color: var(--ln-white); border-color: rgba(255,255,255,0.4);" data-reveal="fade">Trải
+                        Nghiệm Thực Tế</div>
+                    <h2 class="ln-section-title" style="color: var(--ln-white); margin-bottom: 0;" data-reveal="up">Góc
+                        nhìn từ trong căn hộ</h2>
+                </div>
+
+                <a href="{{ $property->video_tour_url }}" data-fancybox class="ln-video-play-btn">
+                    <i class="fa fa-play" style="margin-left: 6px;"></i>
+                </a>
+            </section>
+        @endif
+
         <section class="ln-floorplan">
             <div class="uk-container uk-container-center">
                 <div class="uk-text-center" style="margin-bottom: 50px;">
-                    <div class="ln-label ln-label-center" data-reveal="fade">Sơ Đồ Tầng</div>
+                    <div class="ln-label ln-label-center" data-reveal="fade">Sơ đồ căn hộ</div>
                     <h2 class="ln-section-title" data-reveal="up">Khám Phá Không Gian</h2>
                 </div>
 
