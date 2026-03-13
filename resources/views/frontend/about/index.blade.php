@@ -317,5 +317,5 @@
         </section>
 
     </div>
-    <button id="back-to-top"><i class="fa fa-angle-up"></i></button>
+
 @endsection

@@ -108,3 +108,4 @@
         </div>
     </div>
 </footer>
+@include('frontend.component.floating-social')

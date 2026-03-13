@@ -15,5 +15,19 @@
         if (typeof Fancybox !== 'undefined') {
             Fancybox.bind("[data-fancybox]", {});
         }
+        const backToTop = document.getElementById('hp-back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     });
 </script>
